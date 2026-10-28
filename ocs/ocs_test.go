@@ -68,3 +68,11 @@ func TestCapabilitiesUnmarshalUnauthorized(t *testing.T) {
 	assert.Equal(t, "Unauthorised", c.OCSMeta.Message)
 	assert.Empty(t, c.Data.Capabilities.SpreedCapabilities.Features)
 }
+
+func TestOCSMetaFailed(t *testing.T) {
+	assert.False(t, OCSMeta{Status: "ok", StatusCode: 200, Message: "OK"}.Failed())
+	assert.False(t, OCSMeta{Status: "ok", StatusCode: StatusOK, Message: "OK"}.Failed())
+	assert.False(t, OCSMeta{}.Failed())
+	assert.True(t, OCSMeta{Status: "failure", StatusCode: 997, Message: "Unauthorised"}.Failed())
+	assert.True(t, OCSMeta{StatusCode: 500}.Failed())
+}
